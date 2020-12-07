@@ -1,6 +1,10 @@
 import { combineReducers } from "redux";
-import list from "./list";
+import { listReducer, IListState } from "./list";
 
-export default combineReducers({
-  list,
+export interface IAppState {
+  listState: IListState;
+}
+
+export const reducer = combineReducers<IAppState>({
+  listState: listReducer,
 });

@@ -8,8 +8,9 @@ import { store, persistor } from "./store";
 const App = () => {
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}></PersistGate>
-      <Navigation />
+      <PersistGate loading={null} persistor={persistor}>
+        <Navigation />
+      </PersistGate>
     </Provider>
   );
 };

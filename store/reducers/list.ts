@@ -1,24 +1,24 @@
-import { UPDATE_LIST_RESULTS } from "../../constants/actions";
+import { Reducer } from "redux";
+import { ListActionTypes, ListActions } from "../actions/list";
+export interface IListState {
+  items: Array<{ _id: number }>;
+}
 
-interface ListAction {}
+const initialListState: IListState = {
+  items: [],
+};
 
-const list = (
-  state = {
-    items: [],
-  },
-  action: any
+export const listReducer: Reducer<IListState, ListActions> = (
+  state = initialListState,
+  action
 ) => {
   switch (action.type) {
-    case "UPDATE_LIST_RESULTS":
+    case ListActionTypes.UPDATE_LIST:
       const nState = Object.assign({}, state, {
         items: action.items,
       });
-
       return nState;
-
     default:
       return state;
   }
 };
-
-export default list;

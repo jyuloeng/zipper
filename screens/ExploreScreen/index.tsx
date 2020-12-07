@@ -2,18 +2,13 @@ import React, { useState, useEffect } from "react";
 import { FlatList, View, Text, SafeAreaView, StyleSheet } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
-import { updateListResults } from "../../store/actions";
+import { updateListAction } from "../../store/actions/list";
+import { IAppState } from "../../store/reducers";
 import { fetchResults } from "./data";
-
-interface IStateProps {
-  list: {
-    items: Array<{ _id: number }>;
-  };
-}
 
 export default function App() {
   const dispatch = useDispatch();
-  const listItems = useSelector((state: IStateProps) => state.list.items);
+  const listItems = useSelector((state: IAppState) => state.listState.items);
   const totalItems = Array.isArray(listItems) ? listItems.length : 0;
   const [loadingMore, setLoadingMore] = useState(false);
   const [allLoaded, setAllLoaded] = useState(false);
@@ -30,7 +25,7 @@ export default function App() {
     //   items: list,
     // });
 
-    dispatch(updateListResults(list));
+    dispatch(updateListAction(list));
   };
 
   const persistResults = async (newItems: any) => {
@@ -40,10 +35,7 @@ export default function App() {
       list.push(item);
     }
 
-    dispatch({
-      type: "UPDATE_LIST_RESULTS",
-      items: list,
-    });
+    dispatch(updateListAction(list));
   };
 
   const loadMoreResults = async () => {
