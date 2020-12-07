@@ -127,7 +127,7 @@ const Subtitle = styled.Text`
 `;
 
 const InputContainer = styled.View`
-  padding: 0 46px;
+  padding: 0 25px;
 `;
 
 const BtnLogin = styled.TouchableOpacity`
@@ -136,7 +136,7 @@ const BtnLogin = styled.TouchableOpacity`
   height: 60px;
   margin-top: 46px;
   background: #327feb;
-  border-radius: 17px;
+  border-radius: 28.5px;
 `;
 
 const LoginText = styled.Text`

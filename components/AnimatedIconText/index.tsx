@@ -144,7 +144,7 @@ const TextInput = styled.TextInput`
   padding: 0 44px;
   font-size: 17px;
   color: #3c4560;
-  border-radius: 12px;
+  border-radius: 27.5px;
   border: 1px solid #dbdfea;
 `;
 

@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import {
-  SafeAreaView,
-  Platform,
-  StatusBar,
-  Keyboard,
-  Modal,
-} from "react-native";
+import { SafeAreaView, Platform, StatusBar, Keyboard } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { UserIcon, PasswordIcon } from "../../components/Icons";
@@ -16,7 +10,6 @@ import { phonePattern, emailPattern } from "../../constants/regex";
 import Success from "../../components/Success";
 import Loading from "../../components/Loading";
 import ResultModal, { ResultType } from "../../components/ResultModal";
-import BottomModal from "../../components/BottomModal";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -165,7 +158,7 @@ const Subtitle = styled.Text`
 `;
 
 const InputContainer = styled.View`
-  padding: 46px;
+  padding: 46px 25px;
 `;
 
 const BtnLogin = styled.TouchableOpacity`
@@ -174,7 +167,7 @@ const BtnLogin = styled.TouchableOpacity`
   height: 60px;
   margin-top: 46px;
   background: #327feb;
-  border-radius: 17px;
+  border-radius: 28.5px;
 `;
 
 const LoginText = styled.Text`
