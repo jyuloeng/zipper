@@ -1,101 +1,97 @@
-import React, { useRef, useMemo, useEffect } from "react";
-import { Modal, View, StyleSheet, Animated, PanResponder } from "react-native";
-import { ScreenHeight } from "../../constants/dimensions";
+import React from "react";
+import styled from "styled-components/native";
+import BottomModal from "../BottomModal";
+
+import ResultSuccessIcon from "../Icons/ResultSuccessIcon";
+import ResultFailedIcon from "../Icons/ResultFailedIcon";
+
+export enum ResultType {
+  SUCCESS = "SUCCESS",
+  FAILED = "FAILED",
+}
 
 interface ResultModalProps {
   visible: boolean;
-  children: React.ReactNode;
+  type: ResultType;
+  title: string;
+  subtitle: string;
+  btnText: string;
   onDismiss: () => void;
 }
 
-const useNativeDriver = false;
-
-//  todo 这个应该算一个 BottomModal 抽离去另一个组件，然后再封装一个 ResultModals
 const ResultModal = (props: ResultModalProps) => {
-  const { visible, children, onDismiss } = props;
+  const { visible, type, title, subtitle, btnText, onDismiss } = props;
 
-  const panY = useRef(new Animated.Value(ScreenHeight)).current;
-
-  // ! 整了个插值给他
-  const top = panY.interpolate({
-    inputRange: [-1, 0, 1],
-    outputRange: [0, 0, 1],
-  });
-
-  const panResponder = useMemo(
-    () =>
-      PanResponder.create({
-        onStartShouldSetPanResponder: () => true,
-        onMoveShouldSetPanResponder: () => true,
-        onPanResponderMove: Animated.event(
-          [
-            null,
-            {
-              dy: panY,
-            },
-          ],
-          {
-            useNativeDriver,
-          }
-        ),
-        onPanResponderRelease: (e, gs) => {
-          if (gs.dy > 0 && gs.vy > 1.2) {
-            return closeAnim.start(() => onDismiss());
-          }
-          return resetPositionAnim.start();
-        },
-      }),
-    []
-  );
-
-  useEffect(() => {
-    resetPositionAnim.start();
-  }, [visible]);
-
-  const resetPositionAnim = Animated.timing(panY, {
-    toValue: 0,
-    useNativeDriver,
-  });
-
-  const closeAnim = Animated.timing(panY, {
-    toValue: ScreenHeight,
-    useNativeDriver,
-  });
-
-  const handleDismiss = () => {};
+  const ResultIcon = () => {
+    switch (type) {
+      case ResultType.SUCCESS:
+        return <ResultSuccessIcon />;
+      case ResultType.FAILED:
+        return <ResultFailedIcon />;
+      default:
+        return null;
+    }
+  };
 
   return (
-    <Modal
-      animated
-      animationType="fade"
+    <BottomModal
       visible={visible}
-      transparent
-      onRequestClose={() => handleDismiss()}
-    >
-      <View style={styles.overlay}>
-        <Animated.View
-          style={[styles.container, { top }]}
-          {...panResponder.panHandlers}
-        >
-          {children}
-        </Animated.View>
-      </View>
-    </Modal>
+      children={
+        <Container>
+          <Icon>
+            <ResultIcon />
+          </Icon>
+          <Title>{title}</Title>
+          <Subtitle>{subtitle}</Subtitle>
+          <BtnContainer>
+            <BtnText>{btnText}</BtnText>
+          </BtnContainer>
+        </Container>
+      }
+      onDismiss={() => onDismiss()}
+    />
   );
 };
 
 export default ResultModal;
 
-const styles = StyleSheet.create({
-  overlay: {
-    backgroundColor: "rgba(0,0,0,0.2)",
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  container: {
-    backgroundColor: "white",
-    paddingTop: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
-  },
-});
+const Container = styled.View`
+  padding: 41px 25px 74px;
+`;
+
+const Icon = styled.View`
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Title = styled.Text`
+  margin-top: 45px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #383838;
+  line-height: 33px;
+  text-align: center;
+`;
+
+const Subtitle = styled.Text`
+  margin: 20px 0 58px;
+  font-size: 16px;
+  color: rgba(56, 56, 56, 0.8);
+  line-height: 26px;
+  text-align: center;
+`;
+
+const BtnContainer = styled.TouchableOpacity`
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  background: #327feb;
+  border-radius: 28.5px;
+`;
+
+const BtnText = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+`;

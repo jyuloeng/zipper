@@ -15,7 +15,8 @@ import { inactiveTintColor } from "../../constants/colors";
 import { phonePattern, emailPattern } from "../../constants/regex";
 import Success from "../../components/Success";
 import Loading from "../../components/Loading";
-import ResultModal from "../../components/ResultModal";
+import ResultModal, { ResultType } from "../../components/ResultModal";
+import BottomModal from "../../components/BottomModal";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -121,8 +122,11 @@ const LoginScreen = () => {
 
       <ResultModal
         visible={visible}
+        type={ResultType.SUCCESS}
+        title="Comment Added"
+        subtitle="Your comment was succesfully published to this post."
+        btnText="Done"
         onDismiss={() => setVisible(false)}
-        children={<ModalView></ModalView>}
       />
     </Container>
   );
@@ -175,6 +179,7 @@ const BtnLogin = styled.TouchableOpacity`
 
 const LoginText = styled.Text`
   font-size: 18px;
+  font-weight: bold;
   color: white;
 `;
 

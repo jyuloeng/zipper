@@ -45,13 +45,13 @@ const Stack = createStackNavigator();
 
 const StackNavigator = () => (
   <Stack.Navigator mode="card" headerMode="none">
-    <Stack.Screen
+    {/* <Stack.Screen
       name="Tab"
       component={TabNavigator}
       options={{
         gestureEnabled: false,
       }}
-    />
+    /> */}
     <Stack.Screen
       name="Login"
       component={LoginScreen}
@@ -81,13 +81,13 @@ const StackNavigator = () => (
       }}
     />
 
-    {/* <Stack.Screen
+    <Stack.Screen
       name="Tab"
       component={TabNavigator}
       options={{
         gestureEnabled: false,
       }}
-    /> */}
+    />
     <Stack.Screen name="Studio" component={StudioScreen} />
     <Stack.Screen name="Liked" component={LikedScreen} />
     <Stack.Screen name="Message" component={MessageScreen} />

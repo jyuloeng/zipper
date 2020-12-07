@@ -141,6 +141,7 @@ const BtnLogin = styled.TouchableOpacity`
 
 const LoginText = styled.Text`
   font-size: 18px;
+  font-weight: bold;
   color: white;
 `;
 
