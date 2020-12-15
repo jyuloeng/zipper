@@ -1,16 +1,21 @@
 import React from "react";
 import styled from "styled-components/native";
-import { SafeAreaView, View, Dimensions } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Feather, AntDesign } from "@expo/vector-icons";
 
 import { StackParamList } from "../../types";
 import { defaultBlackColor } from "../../constants/colors";
-import Avatar from "../../components/Avatar";
-import CollapseText from "../../components/CollapseText";
 import TabView from "../../components/TabView";
+import TabView2 from "../../components/TabView/tabview";
 import Header from "../../components/Header";
+import Intro from "../../components/Intro";
 
 type StudioProp = StackScreenProps<StackParamList, "Studio">;
 
@@ -38,63 +43,9 @@ const StudioScreen = ({ route, navigation }: StudioProp) => {
           }
           btnLeftOnPress={handleGoBack}
         />
-
-        <ScrollView>
-          <Intro>
-            <Meta>
-              <Avatar
-                width={96}
-                height={96}
-                image={"https://picsum.photos/100/100"}
-              />
-              <Data>
-                <DataItem>
-                  <DataNumber>23</DataNumber>
-                  <DataTitle>动态</DataTitle>
-                </DataItem>
-
-                <DataItem>
-                  <DataNumber>24.6k</DataNumber>
-                  <DataTitle>粉丝</DataTitle>
-                </DataItem>
-
-                <DataItem>
-                  <DataNumber>62</DataNumber>
-                  <DataTitle>已关注</DataTitle>
-                </DataItem>
-              </Data>
-            </Meta>
-
-            <Content>
-              <Author>
-                <Name>Cabeza Patata</Name>
-                <Vertical>|</Vertical>
-                <Profession>Programmer</Profession>
-              </Author>
-              <CollapseText
-                text={
-                  "Thanks to Design+Code, I improved my design skill and learned to do animations for my app Price Tag, a top news app in China. Thanks to Design+Code, I improved my design skill and learned to do animations for my app Price Tag, a top news app in China."
-                }
-              />
-            </Content>
-          </Intro>
-
-          <BtnContainer>
-            <BtnChat>
-              <AntDesign name="message1" size={24} color={defaultBlackColor} />
-            </BtnChat>
-            <BtnFollow>
-              <BtnFollowText>关注</BtnFollowText>
-            </BtnFollow>
-
-            {/* <BtnFollowing>
-              <BtnFollowingText>关注中</BtnFollowingText>
-            </BtnFollowing> */}
-          </BtnContainer>
-
-          <TabView />
-        </ScrollView>
       </SafeAreaView>
+      
+      <TabView2 />
     </Container>
   );
 };
@@ -104,10 +55,6 @@ export default StudioScreen;
 const Container = styled.View`
   flex: 1;
   background: #fff;
-`;
-
-const Intro = styled.View`
-  padding: 15px 25px 0;
 `;
 
 const Meta = styled.View`

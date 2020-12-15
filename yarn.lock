@@ -1307,6 +1307,13 @@
     query-string "^6.13.6"
     react-is "^16.13.0"
 
+"@react-navigation/material-top-tabs@^5.3.10":
+  version "5.3.10"
+  resolved "https://registry.yarnpkg.com/@react-navigation/material-top-tabs/-/material-top-tabs-5.3.10.tgz#158b694e87bff2eb9577e8142415de8ac3547412"
+  integrity sha512-mmQYEBhcLp1DwvuD8+HiFtYPk5zP43272C/38iX2T8AblcwRdoJejuO/GUzQcEPrmZHjeAnA5GDaMiXQM4EXLQ==
+  dependencies:
+    color "^3.1.3"
+
 "@react-navigation/native@^5.8.8":
   version "5.8.8"
   resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-5.8.8.tgz#55216b0f95dcd6971198c9d3717b7d7af6a5faee"
@@ -4848,6 +4855,13 @@ react-is@^16.12.0, react-is@^16.13.0, react-is@^16.13.1, react-is@^16.7.0, react
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-native-collapsible-tab-view@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/react-native-collapsible-tab-view/-/react-native-collapsible-tab-view-1.4.1.tgz#6c54114f5a7860b79cf2068ecbf364282d641092"
+  integrity sha512-iZbcb3BF3ryDijkipyLZMrolMi1p9VhiphXnQj17KPSpHmiVYKHI2OQn+rTGmYxUSa1VXnZXySn9CrAFVa83sA==
+  dependencies:
+    use-debounce "^5.1.0"
+
 react-native-gesture-handler@~1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.7.0.tgz#0ef74a5ba836832e497dc49eb1ce58baa6c617e5"
@@ -5875,6 +5889,11 @@ url-parse@^1.4.4:
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
+
+use-debounce@^5.1.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-5.2.0.tgz#3cb63f5c46f40092c570356e441dbc016ffb2f8b"
+  integrity sha512-lW4tbPsTnvPKYqOYXp5xZ7SP7No/ARLqqQqoyRKuSzP0HxR9arhSAhznXUZFoNPWDRij8fog+N6sYbjb8c3kzw==
 
 use-subscription@^1.0.0:
   version "1.5.0"
