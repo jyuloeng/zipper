@@ -6,6 +6,10 @@ import {
 } from "react-native-collapsible-tab-view";
 import { SceneMap } from "react-native-tab-view";
 
+import { AnimatedAlbums } from "./Shared/Albums";
+import { AnimatedArticle } from "./Shared/Article";
+import { AnimatedContacts } from "./Shared/Contacts";
+
 import Intro from "../Intro";
 
 type Route = {
@@ -32,6 +36,21 @@ const SomeRoute: React.FC<{ routeKey: string; color: string }> = ({
 const FirstScene = () => <SomeRoute routeKey="first" color="white" />;
 const SecondScene = () => <SomeRoute routeKey="second" color="black" />;
 
+export const ContactsScene = () => {
+  const scenePropsAndRef = useCollapsibleScene("contacts");
+  return <AnimatedContacts {...scenePropsAndRef} />;
+};
+
+export const ArticleScene = () => {
+  const scenePropsAndRef = useCollapsibleScene("article");
+  return <AnimatedArticle {...scenePropsAndRef} />;
+};
+
+export const AlbumsScene = () => {
+  const scenePropsAndRef = useCollapsibleScene("albums");
+  return <AnimatedAlbums {...scenePropsAndRef} />;
+};
+
 const HEADER_HEIGHT = 250;
 
 const renderHeader = () => (
@@ -41,15 +60,17 @@ const renderHeader = () => (
 );
 
 const renderScene = SceneMap({
-  first: FirstScene,
-  second: SecondScene,
+  albums: AlbumsScene,
+  contacts: ContactsScene,
+  article: ArticleScene,
 });
 
 const App: React.FC<object> = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState<Route[]>([
-    { key: "first", title: "First" },
-    { key: "second", title: "Second" },
+    { key: "article", title: "Article" },
+    { key: "contacts", title: "Contacts" },
+    { key: "albums", title: "Albums" },
   ]);
 
   const handleIndexChange = (index: number) => {

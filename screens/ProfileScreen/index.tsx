@@ -5,6 +5,7 @@ import { SafeAreaView, ScrollView } from "react-native";
 import Header from "../../components/Header";
 import Intro from "../../components/Intro";
 import { SettingIcon } from "../../components/Icons";
+import TabView from '../../components/TabView'
 
 const ProfileScreen = () => {
   return (
@@ -32,7 +33,7 @@ const ProfileScreen = () => {
             description="Thanks to Design+Code, I improved my design skill and learned to do animations for my app Price Tag, a top news app in China. Thanks to Design+Code, I improved my design skill and learned to do animations for my app Price Tag, a top news app in China."
             isShowBtn={false}
           />
-          {/* <TabView /> */}
+          <TabView />
         </ScrollView>
       </SafeAreaView>
     </Container>
