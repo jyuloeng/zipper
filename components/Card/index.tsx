@@ -19,19 +19,19 @@ const HomeCard = (props: HomeCardProps) => {
     author,
     image,
     caption,
-    subtitle,
-    likes,
+    content,
+    like_count,
     like_authors,
     comment_count,
     comments,
     tag,
     location,
-    create_gmt,
+    gmt_create,
   } = props;
 
   const navigation = useNavigation();
 
-  const [width, setWidth] = useState<number>(ScreenWidth - 20);
+  const [width, setWidth] = useState<number>(ScreenWidth - 30);
   const [height, setHeight] = useState<number>();
 
   const handleLike = () => {};
@@ -64,7 +64,7 @@ const HomeCard = (props: HomeCardProps) => {
           />
           <AuthorWrapper>
             <Author>{author}</Author>
-            <CreateTime>{create_gmt} 天前</CreateTime>
+            <CreateTime>{gmt_create} 天前</CreateTime>
           </AuthorWrapper>
         </HeaderTouchable>
 
@@ -99,7 +99,7 @@ const HomeCard = (props: HomeCardProps) => {
               </ActionBar>
             </Action>
 
-            {likes && like_authors ? (
+            {like_count && like_authors ? (
               <LikesContainer>
                 <LikesAuthor>
                   <Avatar
@@ -146,14 +146,14 @@ const HomeCard = (props: HomeCardProps) => {
                     />
                   ) : null}
                 </LikesAuthor>
-                <Likes>{likes} 次赞</Likes>
+                <Likes>{like_count} 次赞</Likes>
               </LikesContainer>
             ) : null}
           </Meta>
 
           <Caption>{caption}</Caption>
 
-          {subtitle ? <CollapseText text={subtitle} /> : null}
+          {content ? <CollapseText text={content} /> : null}
         </Content>
 
         {tag || location ? (
@@ -205,16 +205,16 @@ export default HomeCard;
 
 const Container = styled.View`
   background: white;
-  margin: 0px 10px 15px;
-  border-radius: 14px;
+  /* margin: 0px 10px 15px; */
+  /* border-radius: 14px; */
   /* box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.2); */
-  box-shadow: 4px 5px 4px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 4px 5px 4px rgba(0, 0, 0, 0.1); */
 `;
 
 const Header = styled.View`
   flex-direction: row;
   align-items: center;
-  padding: 12px 13px 12px;
+  padding: 12px 20px;
 `;
 
 const HeaderTouchable = styled.TouchableOpacity`
@@ -245,15 +245,18 @@ const CoverContainer = styled.View``;
 
 const Cover = styled.View`
   width: 100%;
+  margin: 0 15px;
   border-radius: 14px;
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.2);
 `;
 
 const CoverImage = styled.Image`
   width: 100%;
+  border-radius: 14px;
 `;
 
 const Content = styled.View`
-  padding: 13px;
+  padding: 13px 18px;
 `;
 
 const Meta = styled.View`
@@ -294,7 +297,7 @@ const Caption = styled.Text`
 
 const TagContainer = styled.View`
   flex-direction: row;
-  padding: 0 13px 8px;
+  padding: 0 15px 8px;
 `;
 
 const Tag = styled.View`
@@ -327,7 +330,7 @@ const TagContent = styled.Text`
 `;
 
 const CommentContainer = styled.View`
-  padding: 0 13px 13px;
+  padding: 0 18px 13px;
 `;
 
 const Count = styled.Text`

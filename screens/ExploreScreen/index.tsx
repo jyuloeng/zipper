@@ -49,7 +49,7 @@ export default function App() {
     const newItems = fetchResults(totalItems);
 
     // mimic server-side API request and delay execution for 1 second
-    await new Promise((resolve) => {
+    await new Promise<void>((resolve) => {
       setTimeout(() => {
         resolve();
       }, 1000);

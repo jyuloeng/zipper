@@ -13,6 +13,8 @@ import ExploreScreen from "../screens/ExploreScreen";
 import ActivityScreen from "../screens/ActivityScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import TempScreen from "../screens/TempScreen";
+import FindScreen from '../screens/FindScreen'
+import PostScreen from "../screens/PostScreen/index";
 
 import StudioScreen from "../screens/StudioScreen";
 import LikedScreen from "../screens/LikedScreen";
@@ -34,8 +36,10 @@ const TabNavigator = () => (
     }}
   >
     <Tab.Screen name="Home" component={HomeScreen} />
-    <Tab.Screen name="Explore" component={ExploreScreen} />
-    <Tab.Screen name="Temp" component={TempScreen} />
+    {/* <Tab.Screen name="Explore" component={ExploreScreen} /> */}
+    <Tab.Screen name="Explore" component={FindScreen} />
+    {/* <Tab.Screen name="Temp" component={TempScreen} /> */}
+    <Tab.Screen name="Post" component={PostScreen} />
     <Tab.Screen name="Activity" component={ActivityScreen} />
     <Tab.Screen name="Profile" component={ProfileScreen} />
   </Tab.Navigator>

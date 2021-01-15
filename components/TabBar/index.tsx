@@ -66,7 +66,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({
         };
 
         {
-          if (route.name === "Temp") {
+          if (route.name === "Post") {
             return (
               <RoundBarTouchableContainer
                 key={route.name}

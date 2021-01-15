@@ -10,6 +10,7 @@ import {
 import { SimpleLineIcons } from "@expo/vector-icons";
 
 import Card from "../../components/Card";
+import RecentUpdate from "../../components/RecentUpdate/index";
 import { activeTintColor, backgroundColor } from "../../constants/colors";
 import { ShareIcon } from "../../components/Icons";
 import { HomeCardProps } from "../../types";
@@ -21,9 +22,9 @@ const cards = [
     image: "https://picsum.photos/720/1440",
     author: "Liu Yi",
     avatar: "https://randomuser.me/api/portraits/thumb/men/75.jpg",
-    subtitle:
+    content:
       "Thanks to Design+Code, I improved my design skill and learned to do animations for my app Price Tag, a top news app in China. Thanks to Design+Code, I improved my design skill and learned to do animations for my app Price Tag, a top news app in China. ",
-    likes: 34,
+    like_count: 34,
     like_authors: [
       {
         id: 235,
@@ -62,7 +63,7 @@ const cards = [
       id: 645,
       name: "上海",
     },
-    create_gmt: 3,
+    gmt_create: 3,
   },
   {
     id: 2,
@@ -70,9 +71,9 @@ const cards = [
     image: "https://picsum.photos/1440/720",
     author: "Chad Goodman",
     avatar: "https://randomuser.me/api/portraits/thumb/men/70.jpg",
-    subtitle:
+    content:
       "Design+Code was the first resource I used when breaking into software. I went from knowing nothing about design or code to building a production ready app from scratch. ",
-    likes: 29023,
+    like_count: 29023,
     like_authors: [
       {
         id: 235,
@@ -106,7 +107,7 @@ const cards = [
       id: 35,
       name: "佛山·迎海国际城",
     },
-    create_gmt: 5,
+    gmt_create: 5,
   },
   {
     id: 3,
@@ -114,9 +115,9 @@ const cards = [
     image: "https://picsum.photos/1920/1080",
     author: "Nikhil D'Souza",
     avatar: "https://randomuser.me/api/portraits/thumb/men/60.jpg",
-    subtitle:
+    content:
       "Recently finished the React course by @Mengto, and I 10/10 would recommend. I already rewrote my personal website in @reactjs and I'm very excited with it.",
-    likes: 1,
+    like_count: 1,
     like_authors: [
       {
         id: 235,
@@ -145,7 +146,42 @@ const cards = [
       id: 15,
       name: "佛山",
     },
-    create_gmt: 2,
+    gmt_create: 2,
+  },
+];
+
+const recentUpdateUsers = [
+  {
+    avatar: "https://randomuser.me/api/portraits/thumb/men/65.jpg",
+    username: "Liu Yi",
+  },
+  {
+    avatar: "https://randomuser.me/api/portraits/thumb/men/63.jpg",
+    username: "Yu Liang",
+  },
+  {
+    avatar: "https://randomuser.me/api/portraits/thumb/women/65.jpg",
+    username: "odd",
+  },
+  {
+    avatar: "https://randomuser.me/api/portraits/thumb/women/6.jpg",
+    username: "zqa",
+  },
+  {
+    avatar: "https://randomuser.me/api/portraits/thumb/women/5.jpg",
+    username: "laydy",
+  },
+  {
+    avatar: "https://randomuser.me/api/portraits/thumb/men/5.jpg",
+    username: "qing",
+  },
+  {
+    avatar: "https://randomuser.me/api/portraits/thumb/men/1.jpg",
+    username: "ding",
+  },
+  {
+    avatar: "https://randomuser.me/api/portraits/thumb/women/7.jpg",
+    username: "Jia Wei",
   },
 ];
 
@@ -198,6 +234,8 @@ const HomeScreen = () => {
           <Logo>Zipper</Logo>
           <ActionBar name="direct" onPress={handleDirect} />
         </Header>
+
+        <RecentUpdate list={recentUpdateUsers} />
 
         <FlatList
           data={cards}

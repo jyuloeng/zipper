@@ -14,8 +14,8 @@ export type HomeCardProps = {
   author: string;
   image: string;
   caption?: string;
-  subtitle?: string;
-  likes?: number;
+  content?: string;
+  like_count?: number;
   like_authors?: Array<{
     id: string | number;
     nickname: string;
@@ -35,5 +35,5 @@ export type HomeCardProps = {
     id: string | number;
     name: string;
   };
-  create_gmt: number;
+  gmt_create: number;
 };
