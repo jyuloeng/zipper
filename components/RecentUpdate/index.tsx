@@ -18,7 +18,7 @@ const RecentUpdate = (props: RecentUpdateProps) => {
     <Container>
       <UserContainer horizontal={true} showsHorizontalScrollIndicator={false}>
         {list.map((user) => (
-          <RecentUpdateUser>
+          <RecentUpdateUser key={user.username}>
             <AvatarContainer>
               <Avatar image={user.avatar} borderRadius={14} />
             </AvatarContainer>
