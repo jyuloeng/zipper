@@ -9,6 +9,7 @@ import { ScreenWidth } from "../../constants/dimensions";
 import { LikeIcon, CommentIcon, ShareIcon } from "../Icons";
 import CollapseText from "../CollapseText";
 import { HomeCardProps } from "../../types";
+import { defaultBlueColor } from "../../constants/colors";
 
 const avatarSize = 34;
 const likeAvatarSize = 24;
@@ -162,7 +163,11 @@ const HomeCard = (props: HomeCardProps) => {
               <TouchableOpacity>
                 <Tag>
                   <TagIcon>
-                    <Ionicons name="ios-at" size={13} color="#327feb" />
+                    <Ionicons
+                      name="ios-at"
+                      size={13}
+                      color={defaultBlueColor}
+                    />
                   </TagIcon>
                   <TagContent>{tag?.name}</TagContent>
                 </Tag>
@@ -173,7 +178,11 @@ const HomeCard = (props: HomeCardProps) => {
               <TouchableOpacity>
                 <Tag>
                   <TagIcon>
-                    <MaterialIcons name="pin-drop" size={13} color="#327feb" />
+                    <MaterialIcons
+                      name="pin-drop"
+                      size={13}
+                      color={defaultBlueColor}
+                    />
                   </TagIcon>
                   <TagContent>{location?.name}</TagContent>
                 </Tag>

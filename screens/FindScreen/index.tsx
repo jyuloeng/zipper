@@ -3,17 +3,28 @@ import styled from "styled-components/native";
 import {
   SafeAreaView,
   StyleSheet,
-  TouchableOpacity,
+  ScrollView,
+  FlatList,
+  TouchableWithoutFeedback,
   Platform,
 } from "react-native";
 import Carousel, {
   ParallaxImage,
   AdditionalParallaxProps,
 } from "react-native-snap-carousel";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons, Entypo } from "@expo/vector-icons";
 
+import Avatar from "../../components/Avatar/index";
 import { ExploreIcon } from "../../components/Icons/index";
 import { ScreenWidth } from "../../constants/dimensions";
-import { activeTintColor } from "../../constants/colors";
+import {
+  activeTintColor,
+  defaultBlueColor,
+  backgroundColor,
+  defaultBlackColor,
+  inactiveTintColor,
+} from "../../constants/colors";
 
 const exploreIconStyle = {
   position: "absolute",
@@ -49,6 +60,52 @@ const ENTRIES1 = [
   },
 ];
 
+interface TalkingTopicProps {
+  id: string;
+  title: string;
+  cover: string;
+  talks: number;
+}
+
+const talkingTopics: Array<TalkingTopicProps> = [];
+
+for (let i = 0; i < 6; i++) {
+  talkingTopics.push({
+    id: (Math.random() + Date.now()).toString(),
+    title: `第${i}话题`,
+    cover: "https://picsum.photos/200/150",
+    talks: ~~(Math.random() * 999),
+  });
+}
+
+interface RecommendedUserProps {
+  id: string;
+  nickname: string;
+  avatar: string;
+  activities: number;
+  description: string;
+  covers: Array<{
+    id: string;
+    cover: string;
+  }>;
+}
+
+const recomendedUsers: Array<RecommendedUserProps> = [];
+
+for (let i = 0; i < 20; i++) {
+  recomendedUsers.push({
+    id: (Math.random() + Date.now()).toString(),
+    nickname: `第${i + 1}位PO主`,
+    avatar: `https://randomuser.me/api/portraits/thumb/women/${50 + i}.jpg`,
+    activities: ~~(Math.random() * 999),
+    description: "这是一条重复的描述".repeat(i + 1),
+    covers: new Array(3).fill({
+      id: (Math.random() + Date.now()).toString(),
+      cover: "https://picsum.photos/200/150",
+    }),
+  });
+}
+
 const FindScreen = () => {
   const [searchValue, setSearchValue] = useState("");
   const [carouselCurrentIndex, setCarouselCurrentIndex] = useState(0);
@@ -75,6 +132,94 @@ const FindScreen = () => {
     );
   };
 
+  const TalkingTopicItem = ({ item }: { item: TalkingTopicProps }) => {
+    const { title, cover, talks } = item;
+
+    return (
+      <TalkingTopicItemContainer>
+        <TalkingTopicCover source={{ uri: cover }} />
+        <TalkingTopicCoverMask />
+        <TalkingTopicTitle>
+          <TalkingTopicIcon>
+            <Ionicons name="ios-at" size={14} color="#ffffff" />
+          </TalkingTopicIcon>
+          <TalkingTopicTitleText>{title}</TalkingTopicTitleText>
+        </TalkingTopicTitle>
+        <TalkingTopicTalks>{talks} 条动态</TalkingTopicTalks>
+      </TalkingTopicItemContainer>
+    );
+  };
+
+  const RecommendedUserItem = ({ item }: { item: RecommendedUserProps }) => {
+    const { nickname, avatar, activities, description, covers } = item;
+
+    return (
+      <TouchableWithoutFeedback>
+        <RecommendedUser>
+          <RecommendedUserHeader>
+            <Avatar width={44} height={44} borderRadius={16} image={avatar} />
+            <RecommendedUserInfo>
+              <RecommendedUserNickname>{nickname}</RecommendedUserNickname>
+              <RecommendedUserText>
+                动态 {activities} ｜ {description}
+              </RecommendedUserText>
+            </RecommendedUserInfo>
+            <BtnAttention
+              style={{
+                transform: [{ translateY: -12 }],
+              }}
+            >
+              <BtnAttentionText>关注</BtnAttentionText>
+            </BtnAttention>
+          </RecommendedUserHeader>
+
+          <RecommendedUserCoverContainer>
+            {covers.map((item) => (
+              <RecommendedUserCover
+                key={item.id}
+                source={{ uri: item.cover }}
+              />
+            ))}
+          </RecommendedUserCoverContainer>
+        </RecommendedUser>
+      </TouchableWithoutFeedback>
+    );
+  };
+
+  const RegionHeader = ({ title }: { title: string }) => {
+    return (
+      <RegionHeaderContainer>
+        <RegionTitle>
+          <LinearGradient
+            colors={[
+              defaultBlueColor,
+              "rgba(12,142,255,0.8)",
+              "rgba(12,142,255,0.5)",
+            ]}
+            style={{
+              width: 6,
+              height: 16,
+              alignItems: "center",
+              borderRadius: 4,
+            }}
+          />
+          <RegionTitleText>{title}</RegionTitleText>
+        </RegionTitle>
+
+        <TouchableWithoutFeedback>
+          <BtnRegionAll>
+            <BtnRegionAllText>查看全部</BtnRegionAllText>
+            <Entypo
+              name="chevron-small-right"
+              size={20}
+              color={inactiveTintColor}
+            />
+          </BtnRegionAll>
+        </TouchableWithoutFeedback>
+      </RegionHeaderContainer>
+    );
+  };
+
   return (
     <Container>
       <SafeAreaView>
@@ -93,32 +238,58 @@ const FindScreen = () => {
           />
         </SearchContainer>
 
-        <CarouselContainer>
-          <Carousel
-            sliderWidth={ScreenWidth}
-            itemWidth={ScreenWidth - 60}
-            data={carouselData}
-            renderItem={ParallaxImageItem}
-            hasParallaxImages={true}
-            loop={true}
-            autoplay={true}
-            autoplayDelay={3000}
-            autoplayInterval={5000}
-            onSnapToItem={(index) => setCarouselCurrentIndex(() => index)}
-          />
+        <ScrollView>
+          <CarouselContainer>
+            <Carousel
+              sliderWidth={ScreenWidth}
+              itemWidth={ScreenWidth - 60}
+              data={carouselData}
+              renderItem={ParallaxImageItem}
+              hasParallaxImages={true}
+              loop={true}
+              autoplay={true}
+              autoplayDelay={3000}
+              autoplayInterval={5000}
+              onSnapToItem={(index) => setCarouselCurrentIndex(() => index)}
+            />
 
-          <IndicatorContainer>
-            {carouselData.map((item: any, index: number) => (
-              <Indicator
-                key={item.illustration}
-                style={{
-                  backgroundColor:
-                    index === carouselCurrentIndex ? "#000" : "#fff",
-                }}
-              />
-            ))}
-          </IndicatorContainer>
-        </CarouselContainer>
+            <IndicatorContainer>
+              {carouselData.map((item: any, index: number) => (
+                <Indicator
+                  key={item.illustration}
+                  style={{
+                    width: index === carouselCurrentIndex ? 16 : 8,
+                    backgroundColor:
+                      index === carouselCurrentIndex
+                        ? defaultBlueColor
+                        : backgroundColor,
+                  }}
+                />
+              ))}
+            </IndicatorContainer>
+          </CarouselContainer>
+
+          <HotRank></HotRank>
+
+          <RegionContainer>
+            <RegionHeader title="正在讨论" />
+            <FlatList
+              data={talkingTopics}
+              renderItem={TalkingTopicItem}
+              keyExtractor={(item) => item.id}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            />
+
+            <RegionHeader title="发现PO主" />
+            <FlatList
+              data={recomendedUsers}
+              renderItem={RecommendedUserItem}
+              keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
+            />
+          </RegionContainer>
+        </ScrollView>
       </SafeAreaView>
     </Container>
   );
@@ -133,12 +304,11 @@ const Container = styled.View`
 
 const SearchContainer = styled.View`
   position: relative;
-  margin: 10px 20px 20px;
+  margin: 10px 20px;
 `;
 
 const SearchInput = styled.TextInput`
-  width: 100px;
-  padding: 10px 0 10px 36px;
+  padding: 10px 20px 10px 36px;
   background: #eee;
   font-size: 16px;
   color: #383838;
@@ -152,21 +322,137 @@ const ParallaxImageItemContainer = styled.View`
 
 const CarouselContainer = styled.View`
   position: relative;
+  margin-top: 10px;
 `;
 
 const IndicatorContainer = styled.View`
   position: absolute;
   bottom: 16px;
-  right: 40px;
+  right: 44px;
   flex-direction: row;
 `;
 
 const Indicator = styled.View`
   width: 6px;
-  height: 6px;
+  height: 4px;
   margin-right: 4px;
   background-color: #ffffff;
-  border-radius: 3px;
+  border-radius: 4px;
+`;
+
+const HotRank = styled.View`
+  height: 66px;
+  margin: 20px 20px 0;
+  background-color: ${defaultBlueColor};
+  border-radius: 8px;
+`;
+
+const RegionContainer = styled.View`
+  margin: 16px 20px 0;
+`;
+
+const RegionHeaderContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const RegionTitle = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const RegionTitleText = styled.Text`
+  margin-left: 5px;
+  color: ${defaultBlackColor};
+  font-size: 15px;
+  font-weight: 600;
+`;
+
+const BtnRegionAll = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const BtnRegionAllText = styled.Text`
+  color: ${inactiveTintColor};
+  font-size: 13px;
+`;
+
+const TalkingTopicItemContainer = styled.View`
+  position: relative;
+  margin: 20px 10px 20px 0;
+`;
+
+const TalkingTopicCover = styled.Image`
+  width: 160px;
+  height: 90px;
+  border-radius: 8px;
+`;
+
+const TalkingTopicCoverMask = styled.View`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: ${defaultBlackColor};
+  border-radius: 8px;
+  opacity: 0.34;
+`;
+
+const TalkingTopicTitle = styled.View`
+  position: absolute;
+  left: 12px;
+  bottom: 30px;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const TalkingTopicIcon = styled.View`
+  margin-right: 6px;
+`;
+
+const TalkingTopicTitleText = styled.Text`
+  color: #ffffff;
+`;
+
+const TalkingTopicTalks = styled.Text`
+  position: absolute;
+  left: 12px;
+  bottom: 8px;
+  font-size: 12px;
+  color: #ffffff;
+`;
+
+const RecommendedUser = styled.View``;
+
+const RecommendedUserHeader = styled.View`
+  flex-direction: row;
+`;
+
+const RecommendedUserInfo = styled.View``;
+
+const RecommendedUserNickname = styled.Text``;
+
+const RecommendedUserText = styled.Text``;
+
+const BtnAttention = styled.TouchableOpacity`
+  padding: 6px 12px;
+  border: 1px solid ${defaultBlueColor};
+  border-radius: 15px;
+`;
+
+const BtnAttentionText = styled.Text`
+  color: ${defaultBlueColor};
+  font-size: 13px;
+`;
+
+const RecommendedUserCoverContainer = styled.View``;
+
+const RecommendedUserCover = styled.Image`
+  width: 50px;
+  height: 50px;
 `;
 
 const styles = StyleSheet.create({
