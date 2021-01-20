@@ -16,6 +16,8 @@ import TempScreen from "../screens/TempScreen";
 import FindScreen from '../screens/FindScreen'
 import PostScreen from "../screens/PostScreen/index";
 
+import RecommendedUserScreen from '../screens/RecommendedUserScreen'
+import TopicScreen from '../screens/TopicScreen';
 import StudioScreen from "../screens/StudioScreen";
 import LikedScreen from "../screens/LikedScreen";
 import MessageScreen from "../screens/MessageScreen";
@@ -97,6 +99,8 @@ const StackNavigator = () => (
     <Stack.Screen name="Message" component={MessageScreen} />
     <Stack.Screen name="Attention" component={AttentionScreen} />
     <Stack.Screen name="Notification" component={NotificationScreen} />
+    <Stack.Screen name="Topic" component={TopicScreen} />
+    <Stack.Screen name="RecommendedUser" component={RecommendedUserScreen} />
   </Stack.Navigator>
 );
 

@@ -3,11 +3,12 @@ import styled from "styled-components/native";
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   FlatList,
   TouchableWithoutFeedback,
   Platform,
+  GestureResponderEvent,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Carousel, {
   ParallaxImage,
   AdditionalParallaxProps,
@@ -15,7 +16,7 @@ import Carousel, {
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 
-import Avatar from "../../components/Avatar/index";
+import RecommendedUser from "../../components/RecommendedUser";
 import { ExploreIcon } from "../../components/Icons/index";
 import { ScreenWidth } from "../../constants/dimensions";
 import {
@@ -25,6 +26,8 @@ import {
   defaultBlackColor,
   inactiveTintColor,
 } from "../../constants/colors";
+import { generateUUID } from "../../utils";
+import QuickAttention from "../../components/QuickAttention";
 
 const exploreIconStyle = {
   position: "absolute",
@@ -62,7 +65,7 @@ const ENTRIES1 = [
 
 interface TalkingTopicProps {
   id: string;
-  title: string;
+  name: string;
   cover: string;
   talks: number;
 }
@@ -71,8 +74,8 @@ const talkingTopics: Array<TalkingTopicProps> = [];
 
 for (let i = 0; i < 6; i++) {
   talkingTopics.push({
-    id: (Math.random() + Date.now()).toString(),
-    title: `第${i}话题`,
+    id: generateUUID(),
+    name: `第${i}话题`,
     cover: "https://picsum.photos/200/150",
     talks: ~~(Math.random() * 999),
   });
@@ -94,19 +97,21 @@ const recomendedUsers: Array<RecommendedUserProps> = [];
 
 for (let i = 0; i < 20; i++) {
   recomendedUsers.push({
-    id: (Math.random() + Date.now()).toString(),
+    id: generateUUID(),
     nickname: `第${i + 1}位PO主`,
     avatar: `https://randomuser.me/api/portraits/thumb/women/${50 + i}.jpg`,
     activities: ~~(Math.random() * 999),
     description: "这是一条重复的描述".repeat(i + 1),
     covers: new Array(3).fill({
-      id: (Math.random() + Date.now()).toString(),
+      id: generateUUID(),
       cover: "https://picsum.photos/200/150",
     }),
   });
 }
 
 const FindScreen = () => {
+  const navigation = useNavigation();
+
   const [searchValue, setSearchValue] = useState("");
   const [carouselCurrentIndex, setCarouselCurrentIndex] = useState(0);
   const [carouselData, setCarouselData] = useState<any>([]);
@@ -133,18 +138,15 @@ const FindScreen = () => {
   };
 
   const TalkingTopicItem = ({ item }: { item: TalkingTopicProps }) => {
-    const { title, cover, talks } = item;
+    const { name, cover, talks } = item;
 
     return (
       <TalkingTopicItemContainer>
         <TalkingTopicCover source={{ uri: cover }} />
         <TalkingTopicCoverMask />
-        <TalkingTopicTitle>
-          <TalkingTopicIcon>
-            <Ionicons name="ios-at" size={14} color="#ffffff" />
-          </TalkingTopicIcon>
-          <TalkingTopicTitleText>{title}</TalkingTopicTitleText>
-        </TalkingTopicTitle>
+        <TalkingTopicName>
+          <TalkingTopicNameText># {name}</TalkingTopicNameText>
+        </TalkingTopicName>
         <TalkingTopicTalks>{talks} 条动态</TalkingTopicTalks>
       </TalkingTopicItemContainer>
     );
@@ -152,41 +154,26 @@ const FindScreen = () => {
 
   const RecommendedUserItem = ({ item }: { item: RecommendedUserProps }) => {
     const { nickname, avatar, activities, description, covers } = item;
-
     return (
       <TouchableWithoutFeedback>
-        <RecommendedUser>
-          <RecommendedUserHeader>
-            <Avatar width={44} height={44} borderRadius={16} image={avatar} />
-            <RecommendedUserInfo>
-              <RecommendedUserNickname>{nickname}</RecommendedUserNickname>
-              <RecommendedUserText>
-                动态 {activities} ｜ {description}
-              </RecommendedUserText>
-            </RecommendedUserInfo>
-            <BtnAttention
-              style={{
-                transform: [{ translateY: -12 }],
-              }}
-            >
-              <BtnAttentionText>关注</BtnAttentionText>
-            </BtnAttention>
-          </RecommendedUserHeader>
-
-          <RecommendedUserCoverContainer>
-            {covers.map((item) => (
-              <RecommendedUserCover
-                key={item.id}
-                source={{ uri: item.cover }}
-              />
-            ))}
-          </RecommendedUserCoverContainer>
-        </RecommendedUser>
+        <RecommendedUser
+          {...item}
+          avatarStyle={{
+            width: 44,
+            height: 44,
+          }}
+        />
       </TouchableWithoutFeedback>
     );
   };
 
-  const RegionHeader = ({ title }: { title: string }) => {
+  const RegionHeader = ({
+    title,
+    onPress,
+  }: {
+    title: string;
+    onPress?: (e: GestureResponderEvent) => void;
+  }) => {
     return (
       <RegionHeaderContainer>
         <RegionTitle>
@@ -206,7 +193,7 @@ const FindScreen = () => {
           <RegionTitleText>{title}</RegionTitleText>
         </RegionTitle>
 
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={onPress}>
           <BtnRegionAll>
             <BtnRegionAllText>查看全部</BtnRegionAllText>
             <Entypo
@@ -220,9 +207,17 @@ const FindScreen = () => {
     );
   };
 
+  const handleGoTopic = () => {
+    navigation.navigate("Topic");
+  };
+
+  const handleGoRecommendedUser = () => {
+    navigation.navigate("RecommendedUser");
+  };
+
   return (
     <Container>
-      <SafeAreaView>
+      <SafeAreaView style={{ flex: 1 }}>
         <SearchContainer>
           <SearchInput
             style={{
@@ -238,58 +233,98 @@ const FindScreen = () => {
           />
         </SearchContainer>
 
-        <ScrollView>
-          <CarouselContainer>
-            <Carousel
-              sliderWidth={ScreenWidth}
-              itemWidth={ScreenWidth - 60}
-              data={carouselData}
-              renderItem={ParallaxImageItem}
-              hasParallaxImages={true}
-              loop={true}
-              autoplay={true}
-              autoplayDelay={3000}
-              autoplayInterval={5000}
-              onSnapToItem={(index) => setCarouselCurrentIndex(() => index)}
-            />
-
-            <IndicatorContainer>
-              {carouselData.map((item: any, index: number) => (
-                <Indicator
-                  key={item.illustration}
-                  style={{
-                    width: index === carouselCurrentIndex ? 16 : 8,
-                    backgroundColor:
-                      index === carouselCurrentIndex
-                        ? defaultBlueColor
-                        : backgroundColor,
-                  }}
+        <FlatList
+          data={recomendedUsers}
+          renderItem={RecommendedUserItem}
+          keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={() => (
+            <>
+              <CarouselContainer>
+                <Carousel
+                  sliderWidth={ScreenWidth}
+                  itemWidth={ScreenWidth - 60}
+                  data={carouselData}
+                  renderItem={ParallaxImageItem}
+                  hasParallaxImages={true}
+                  loop={true}
+                  autoplay={true}
+                  autoplayDelay={3000}
+                  autoplayInterval={5000}
+                  onSnapToItem={(index) => setCarouselCurrentIndex(() => index)}
                 />
-              ))}
-            </IndicatorContainer>
-          </CarouselContainer>
 
-          <HotRank></HotRank>
+                <IndicatorContainer>
+                  {carouselData.map((item: any, index: number) => (
+                    <Indicator
+                      key={item.illustration}
+                      style={{
+                        width: index === carouselCurrentIndex ? 16 : 8,
+                        backgroundColor:
+                          index === carouselCurrentIndex
+                            ? defaultBlueColor
+                            : backgroundColor,
+                      }}
+                    />
+                  ))}
+                </IndicatorContainer>
+              </CarouselContainer>
 
-          <RegionContainer>
-            <RegionHeader title="正在讨论" />
-            <FlatList
-              data={talkingTopics}
-              renderItem={TalkingTopicItem}
-              keyExtractor={(item) => item.id}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-            />
+              <HotRank></HotRank>
 
-            <RegionHeader title="发现PO主" />
-            <FlatList
-              data={recomendedUsers}
-              renderItem={RecommendedUserItem}
-              keyExtractor={(item) => item.id}
-              showsVerticalScrollIndicator={false}
-            />
-          </RegionContainer>
-        </ScrollView>
+              <RegionContainer>
+                <RegionHeader
+                  title="正在讨论"
+                  onPress={() => handleGoTopic()}
+                />
+                <FlatList
+                  data={talkingTopics}
+                  renderItem={TalkingTopicItem}
+                  keyExtractor={(item) => item.id}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                />
+
+                <RegionHeader
+                  title="热门PO主"
+                  onPress={() => handleGoRecommendedUser()}
+                />
+
+                <QuickAttentionWrapper>
+                  <QuickAttentionContainer>
+                    <QuickAttention {...recomendedUsers[7]} />
+                  </QuickAttentionContainer>
+                  <QuickAttentionContainer>
+                    <QuickAttention {...recomendedUsers[8]} />
+                  </QuickAttentionContainer>
+                  <QuickAttentionContainer>
+                    <QuickAttention {...recomendedUsers[9]} />
+                  </QuickAttentionContainer>
+                </QuickAttentionWrapper>
+
+                <RegionHeader
+                  title="最新入驻"
+                  onPress={() => handleGoRecommendedUser()}
+                />
+
+                <QuickAttentionContainer>
+                  <QuickAttention {...recomendedUsers[5]} />
+                </QuickAttentionContainer>
+                <QuickAttentionContainer>
+                  <QuickAttention {...recomendedUsers[4]} />
+                </QuickAttentionContainer>
+                <QuickAttentionContainer>
+                  <QuickAttention {...recomendedUsers[3]} />
+                </QuickAttentionContainer>
+
+                <RegionHeader
+                  title="发现PO主"
+                  onPress={() => handleGoRecommendedUser()}
+                />
+              </RegionContainer>
+            </>
+          )}
+        />
       </SafeAreaView>
     </Container>
   );
@@ -344,7 +379,7 @@ const HotRank = styled.View`
   height: 66px;
   margin: 20px 20px 0;
   background-color: ${defaultBlueColor};
-  border-radius: 8px;
+  border-radius: 6px;
 `;
 
 const RegionContainer = styled.View`
@@ -355,6 +390,7 @@ const RegionHeaderContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin-top: 16px;
 `;
 
 const RegionTitle = styled.View`
@@ -365,7 +401,7 @@ const RegionTitle = styled.View`
 const RegionTitleText = styled.Text`
   margin-left: 5px;
   color: ${defaultBlackColor};
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
 `;
 
@@ -387,7 +423,7 @@ const TalkingTopicItemContainer = styled.View`
 const TalkingTopicCover = styled.Image`
   width: 160px;
   height: 90px;
-  border-radius: 8px;
+  border-radius: 6px;
 `;
 
 const TalkingTopicCoverMask = styled.View`
@@ -401,7 +437,7 @@ const TalkingTopicCoverMask = styled.View`
   opacity: 0.34;
 `;
 
-const TalkingTopicTitle = styled.View`
+const TalkingTopicName = styled.View`
   position: absolute;
   left: 12px;
   bottom: 30px;
@@ -413,7 +449,15 @@ const TalkingTopicIcon = styled.View`
   margin-right: 6px;
 `;
 
-const TalkingTopicTitleText = styled.Text`
+const QuickAttentionWrapper = styled.View`
+  margin-top: 16px;
+`;
+
+const QuickAttentionContainer = styled.View`
+  margin: 7px 0;
+`;
+
+const TalkingTopicNameText = styled.Text`
   color: #ffffff;
 `;
 
@@ -425,42 +469,12 @@ const TalkingTopicTalks = styled.Text`
   color: #ffffff;
 `;
 
-const RecommendedUser = styled.View``;
-
-const RecommendedUserHeader = styled.View`
-  flex-direction: row;
-`;
-
-const RecommendedUserInfo = styled.View``;
-
-const RecommendedUserNickname = styled.Text``;
-
-const RecommendedUserText = styled.Text``;
-
-const BtnAttention = styled.TouchableOpacity`
-  padding: 6px 12px;
-  border: 1px solid ${defaultBlueColor};
-  border-radius: 15px;
-`;
-
-const BtnAttentionText = styled.Text`
-  color: ${defaultBlueColor};
-  font-size: 13px;
-`;
-
-const RecommendedUserCoverContainer = styled.View``;
-
-const RecommendedUserCover = styled.Image`
-  width: 50px;
-  height: 50px;
-`;
-
 const styles = StyleSheet.create({
   parallaxImageContainer: {
     flex: 1,
     marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
     backgroundColor: "white",
-    borderRadius: 8,
+    borderRadius: 6,
   },
   parallaxImage: {
     ...StyleSheet.absoluteFillObject,
